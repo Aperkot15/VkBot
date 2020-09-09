@@ -39,7 +39,7 @@ namespace Vkbot.Controllers
             {
                 case "confirmation":
                     var conf = Config["Config:Confitmation"];
-                    Log.LogInformation("Confirm with:" + conf)
+                    Log.LogInformation("Confirm with:" + conf);
                     return Ok(conf);
                 default:
                     break;
