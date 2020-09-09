@@ -38,7 +38,9 @@ namespace Vkbot.Controllers
             switch (json["type"].ToString())
             {
                 case "confirmation":
-                    return Ok(Config["Config:Confitmation"]);
+                    var conf = Config["Config:Confitmation"];
+                    Log.LogInformation("Confirm with:" + conf)
+                    return Ok(conf);
                 default:
                     break;
             }
