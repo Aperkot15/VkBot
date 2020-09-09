@@ -33,7 +33,7 @@ namespace Vkbot.Controllers
         public IActionResult CallBack(JsonElement data) 
         {
             var json = JObject.Parse(data.GetRawText());
-            Log.LogInformation("Json data is:" + json[Config]);
+            Log.LogInformation("Json data is:" + json["Config:Confitmation"]);
 
             switch (json["type"].ToString())
             {
