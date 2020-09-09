@@ -1,12 +1,13 @@
-﻿
-using VkNet.Abstractions;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Text.Json;
+using VkNet.Abstractions;
+using VkNet.Model;
+using VkNet.Model.RequestParams;
+using VkNet.Utils;
 
 namespace Vkbot.Controllers
 {
@@ -18,7 +19,7 @@ namespace Vkbot.Controllers
         private readonly IConfiguration _con;
         private readonly IVkApi _vkApi;
 
-        public BotController(ILogger<BotController> logger,IConfiguration config,IVkApi vkApi)
+        public BotController(ILogger<BotController> logger, IConfiguration config, IVkApi vkApi)
         {
             _log = logger;
             _vkApi = vkApi;
@@ -31,7 +32,7 @@ namespace Vkbot.Controllers
             return Ok("vk bot!");
         }
         [HttpPost("callback")]
-        public IActionResult CallBack(JsonElement data) 
+        public IActionResult CallBack(JsonElement data)
         {
             var json = JObject.Parse(data.GetRawText());
             _log.LogInformation("Json data is:" + _con["Config:Confitmation"]);
@@ -39,20 +40,26 @@ namespace Vkbot.Controllers
             switch (json["type"].ToString())
             {
                 case "confirmation":
-                    var conf = _con["Config:Confitmation"];
-                    _log.LogInformation("Confirm with:" + conf);
-                    return Ok(conf);
-                default:
-                    break;
+                    {
+                        var conf = _con["Config:Confitmation"];
+                        _log.LogInformation("Confirm with:" + conf);
+                        return Ok(conf);
+                    }
             }
 
-            switch (json["object:message_new"].ToString()) 
+            switch (json["object:message_new"].ToString())
             {
                 case "привет":
-                    var message = "Вечер в хату мой повелитель";
-                    return Ok(message);
-                default:
-                    break;
+                    {
+                        var msg = Message.FromJson(new VkResponse(json["object"].ToString()));
+                        _vkApi.Messages.Send(new MessagesSendParams
+                        {
+                            RandomId = new DateTime().Millisecond,
+                            PeerId = msg.PeerId.Value,
+                            Message = msg.Text
+                        });
+                        break;
+                    }
             }
 
             return Ok();
