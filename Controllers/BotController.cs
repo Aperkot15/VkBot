@@ -51,12 +51,12 @@ namespace Vkbot.Controllers
             {
                 case "привет":
                     {
-                        var msg = Message.FromJson(new VkResponse(json["object"].ToString()));
+                        var msg = Message.FromJson(new VkResponse(json["object:message_new"].ToString()));
                         _vkApi.Messages.Send(new MessagesSendParams
                         {
                             RandomId = new DateTime().Millisecond,
                             PeerId = msg.PeerId.Value,
-                            Message = "Вечер в хату"
+                            Message = msg.Text
                         });
                         break;
                     }
