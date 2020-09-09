@@ -51,7 +51,7 @@ namespace Vkbot.Controllers
             {
                 case "привет":
                     {
-                        var msg = Message.FromJson(new VkResponse(json["object:message_new"].ToString()));
+                        var msg = Message.FromJson(new VkResponse(json["object"].ToString()));
                         _vkApi.Messages.Send(new MessagesSendParams
                         {
                             RandomId = new DateTime().Millisecond,
