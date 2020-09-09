@@ -35,7 +35,7 @@ namespace Vkbot.Controllers
             var json = JObject.Parse(data.GetRawText());
             Log.LogInformation("Json data is:" + json);
 
-            switch (json["type"].ToString())
+            switch (json["type"])
             {
                 case "confirmation":
                     var conf = Config["Config:Confitmation"];
