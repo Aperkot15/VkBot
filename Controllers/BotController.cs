@@ -33,8 +33,7 @@ namespace Vkbot.Controllers
         public IActionResult CallBack(JsonElement data) 
         {
             var json = JObject.Parse(data.GetRawText());
-            Log.LogInformation("Json data is:" + json);
-            Log.LogInformation("Json data is 1:" + json["type"].ToString());
+            Log.LogInformation("Json data is:" + json[Config]);
 
             switch (json["type"].ToString())
             {
@@ -46,8 +45,9 @@ namespace Vkbot.Controllers
                     break;
             }
 
-            return Ok("sdfsdf");
+            return Ok();
         }
+
         [HttpGet("callback")]
         public IActionResult CallBackGet()
         {
