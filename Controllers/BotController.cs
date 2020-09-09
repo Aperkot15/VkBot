@@ -11,17 +11,17 @@ using Newtonsoft.Json.Linq;
 
 namespace Vkbot.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BotController : ControllerBase
     {
         public ILogger<BotController> Log { get; }
-        private readonly IConfiguration Config;
+        private readonly IConfiguration Configur;
 
         public BotController(ILogger<BotController> logger,IConfiguration config)
         {
             Log = logger;
-            Config = config;
+            Configur = config;
         }
 
         [HttpGet]
@@ -33,12 +33,12 @@ namespace Vkbot.Controllers
         public IActionResult CallBack(JsonElement data) 
         {
             var json = JObject.Parse(data.GetRawText());
-            Log.LogInformation("Json data is:" + Config["Config:Confitmation"]);
+            Log.LogInformation("Json data is:" + Configur["Config:Confitmation"]);
 
             switch (json["type"].ToString())
             {
                 case "confirmation":
-                    var conf = Config["Config:Confitmation"];
+                    var conf = Configur["Config:Confitmation"];
                     Log.LogInformation("Confirm with:" + conf);
                     return Ok(conf);
                 default:
