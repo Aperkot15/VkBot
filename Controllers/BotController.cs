@@ -29,7 +29,7 @@ namespace Vkbot.Controllers
         {
             return Ok("vk bot!");
         }
-        [HttpPost("callback")]
+        [HttpPost]
         public IActionResult CallBack(JsonElement data) 
         {
             var json = JObject.Parse(data.GetRawText());
