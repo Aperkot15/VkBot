@@ -56,7 +56,7 @@ namespace Vkbot.Controllers
                         {
                             RandomId = new DateTime().Millisecond,
                             PeerId = msg.PeerId.Value,
-                            Message = msg.Text
+                            Message = "Вечер в хату"
                         });
                         break;
                     }
