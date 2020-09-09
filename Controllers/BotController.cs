@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 
@@ -15,10 +16,12 @@ namespace Vkbot.Controllers
     public class BotController : ControllerBase
     {
         public ILogger<BotController> Log { get; }
+        public IConfiguration Config { get; }
 
-        public BotController(ILogger<BotController> logger)
+        public BotController(ILogger<BotController> logger,IConfiguration config)
         {
             Log = logger;
+            Config = config;
         }
 
         [HttpGet]
@@ -31,7 +34,15 @@ namespace Vkbot.Controllers
         {
             var json = JObject.Parse(data.GetRawText());
             Log.LogInformation("Json data is:" + json);
-            
+
+            switch (json["type"].ToString())
+            {
+                case "confirmation":
+                    return Ok(Config["Config:Confitmation"]);
+                default:
+                    break;
+            }
+
             return Ok();
         }
         [HttpGet("callback")]
