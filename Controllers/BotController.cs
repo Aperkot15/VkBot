@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
+using VkNet.Abstractions;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -15,13 +14,15 @@ namespace Vkbot.Controllers
     [ApiController]
     public class BotController : ControllerBase
     {
-        public ILogger<BotController> Log { get; }
-        private readonly IConfiguration Configur;
+        private readonly ILogger<BotController> _log;
+        private readonly IConfiguration _con;
+        private readonly IVkApi _vkApi;
 
-        public BotController(ILogger<BotController> logger,IConfiguration config)
+        public BotController(ILogger<BotController> logger,IConfiguration config,IVkApi vkApi)
         {
-            Log = logger;
-            Configur = config;
+            _log = logger;
+            _vkApi = vkApi;
+            _con = config;
         }
 
         [HttpGet]
@@ -33,14 +34,23 @@ namespace Vkbot.Controllers
         public IActionResult CallBack(JsonElement data) 
         {
             var json = JObject.Parse(data.GetRawText());
-            Log.LogInformation("Json data is:" + Configur["Config:Confitmation"]);
+            _log.LogInformation("Json data is:" + _con["Config:Confitmation"]);
 
             switch (json["type"].ToString())
             {
                 case "confirmation":
-                    var conf = Configur["Config:Confitmation"];
-                    Log.LogInformation("Confirm with:" + conf);
+                    var conf = _con["Config:Confitmation"];
+                    _log.LogInformation("Confirm with:" + conf);
                     return Ok(conf);
+                default:
+                    break;
+            }
+
+            switch (json["object:message_new"].ToString()) 
+            {
+                case "привет":
+                    var message = "Вечер в хату мой повелитель";
+                    return Ok(message);
                 default:
                     break;
             }
