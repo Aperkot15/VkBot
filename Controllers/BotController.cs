@@ -5,6 +5,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json.Linq;
 
 namespace Vkbot.Controllers
 {
@@ -12,6 +14,13 @@ namespace Vkbot.Controllers
     [ApiController]
     public class BotController : ControllerBase
     {
+        public ILogger<BotController> Log { get; }
+
+        public BotController(ILogger<BotController> logger)
+        {
+            Log = logger;
+        }
+
         [HttpGet]
         public IActionResult Get()
         {
@@ -20,6 +29,8 @@ namespace Vkbot.Controllers
         [HttpPost("callback")]
         public IActionResult CallBack(JsonElement data) 
         {
+            var json = JObject.Parse(data.GetRawText());
+            Log.LogInformation("Json data is:" + json);
             
             return Ok();
         }
