@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Vkbot.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class BotController : ControllerBase
     {
