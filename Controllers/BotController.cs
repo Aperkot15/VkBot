@@ -16,7 +16,7 @@ namespace Vkbot.Controllers
     public class BotController : ControllerBase
     {
         public ILogger<BotController> Log { get; }
-        public IConfiguration Config { get; }
+        private readonly IConfiguration Config;
 
         public BotController(ILogger<BotController> logger,IConfiguration config)
         {
